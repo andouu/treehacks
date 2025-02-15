@@ -5,6 +5,7 @@ import { User } from "@/app/Types/User";
 import { useQueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "motion/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -143,7 +144,7 @@ export default function Login() {
         interests: selectedInterests,
       };
       await localStorage.setItem("auth", JSON.stringify(user));
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setStage(3);
 
       queryClient.invalidateQueries({ queryKey: ["auth"] });
@@ -411,15 +412,17 @@ export default function Login() {
             <span className="text-sm text-purple-200">
               Automatically redirecting you...
             </span>
-            <button
-              className={clsx(
-                "w-80 h-12 mt-10 text-center text-neutral-950 bg-white text-lg rounded-full",
-                "active:scale-95 transition-transform duration-150"
-              )}
-              onClick={() => setStage(3)}
-            >
-              Go to dashboard
-            </button>
+            <Link href="/dashboard">
+              <button
+                className={clsx(
+                  "w-80 h-12 mt-10 text-center text-neutral-950 bg-white text-lg rounded-full",
+                  "active:scale-95 transition-transform duration-150"
+                )}
+                onClick={() => setStage(3)}
+              >
+                Go to dashboard
+              </button>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
