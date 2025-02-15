@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import { Providers } from "./Components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -10,6 +12,16 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const telegraf = localFont({
+  src: [
+    {
+      path: "./Assets/Fonts/PPTelegraf-Regular.otf",
+      weight: "400",
+    },
+  ],
+  variable: "--font-telegraf",
 });
 
 export const metadata: Metadata = {
@@ -24,10 +36,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${telegraf.variable} ${telegraf.variable} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
