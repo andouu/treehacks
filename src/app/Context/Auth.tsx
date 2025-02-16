@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext } from "react";
 import { User } from "../Types/User";
 import { useQuery } from "@tanstack/react-query";
 

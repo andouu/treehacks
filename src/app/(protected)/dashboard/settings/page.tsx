@@ -18,8 +18,9 @@ export default function Settings() {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
       <button
-        className="w-80 h-12 flex items-center justify-center text-white bg-neutral-950 text-lg rounded-full active:scale-95 transition-transform duration-150"
+        className="w-80 h-12 flex items-center justify-center text-white bg-neutral-950 text-lg rounded-full disabled:opacity-50 disabled:pointer-events-none active:scale-95 transition-transform duration-150"
         onClick={() => signOutMutation.mutate()}
+        disabled={signOutMutation.isPending}
       >
         {signOutMutation.isPending ? (
           <LoadingIndicator scale={0.25} fg="white" bg="darkgray" />

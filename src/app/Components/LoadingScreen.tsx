@@ -4,7 +4,7 @@ import { LoadingIndicator } from "./LoadingIndicator";
 
 export const LoadingScreen = () => {
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center">
+    <div className="fixed top-0 left-0 z-10 w-full h-screen flex flex-col justify-center items-center">
       <LoadingIndicator />
       <motion.span
         className="text-sm text-neutral-400"
