@@ -2,7 +2,8 @@
 import { LoadingScreen } from "@/app/Components/LoadingScreen";
 import { StockData } from "@/app/Types/Stock";
 import { useQuery } from "@tanstack/react-query";
-import { use } from "react";
+import { use, useEffect, useState } from "react";
+import { useCompletion } from "@ai-sdk/react";
 
 import {
   Line,
@@ -12,6 +13,8 @@ import {
   TooltipProps,
 } from "recharts";
 import PromptWindow from "./Components/PromptWindow";
+import { useAuth } from "@/app/Context/Auth";
+import { LoadingIndicator } from "@/app/Components/LoadingIndicator";
 
 const CustomTooltip = ({ active, payload }: TooltipProps<number, number>) => {
   if (active && payload && payload.length) {
@@ -62,6 +65,22 @@ const AnalysisColumn = ({
 
   const completeZipped = normalized.concat(predictionZipped);
 
+  const { user } = useAuth();
+  const { complete, completion, isLoading } = useCompletion({
+    api: "/api/stocks/analysis",
+    body: { user },
+  });
+
+  const [once, setOnce] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isLoading || once) return;
+    complete(ticker);
+    setOnce(true);
+  }, [once]);
+
+  const reasoning = completion.indexOf("</think>\n\n") === -1;
+
   return (
     <div className="flex-1 overflow-y-auto p-8 pt-12">
       <div className="w-full flex justify-between items-baseline mb-8">
@@ -89,6 +108,17 @@ const AnalysisColumn = ({
           />
         </LineChart>
       </ResponsiveContainer>
+      <div className="flex-1">
+        <span className="block text-2xl mb-3">Analysis</span>
+        {reasoning ? (
+          <div className="flex-1 flex flex-col items-center justify-center gap-2">
+            <LoadingIndicator />
+            <span className="text-neutral-400">Reasoning about {ticker}</span>
+          </div>
+        ) : (
+          completion.slice(completion.indexOf("</think>\n\n") + 10)
+        )}
+      </div>
     </div>
   );
 };

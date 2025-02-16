@@ -1,33 +1,38 @@
 import { groq } from "@ai-sdk/groq";
-import { CoreMessage, streamText } from "ai";
+import { streamText } from "ai";
 
 export async function POST(req: Request) {
-  const { user, messages } = await req.json();
-  if (!messages) {
-    return new Response(JSON.stringify({ error: "No prompt provided" }), {
-      status: 400,
-    });
-  }
+  const { user, ...rest } = await req.json();
 
-  // todo: fetch sys prompt
+  const ticker = rest.prompt;
+
   const { name, experience, riskTolerance, interests } = user;
   const sysFetch = await fetch("http://localhost:8000/api/sysprompt", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      prompt: (messages as CoreMessage[]).findLast((m) => m.role === "user")!
-        .content,
+      prompt: `Analyze NYSE Symbol ${ticker}`,
       name,
       experience,
       riskTolerance,
       interests,
     }),
   });
+
   const { system_prompt } = await sysFetch.json();
 
   const result = streamText({
     model: groq("deepseek-r1-distill-llama-70b"),
-    messages,
+    messages: [
+      {
+        role: "system",
+        content: system_prompt,
+      },
+      {
+        role: "user",
+        content: `Analyze NYSE Symbol ${ticker}`,
+      },
+    ],
     system: system_prompt,
   });
 
