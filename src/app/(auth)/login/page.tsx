@@ -217,8 +217,9 @@ export default function Login() {
               </div>
               <div>
                 <span className="block w-full text-sm">Experience</span>
-                <span className="block w-full text-sm mb-1 text-neutral-400">
-                  0 meaning no experience, 10 meaning expert.
+                <span className="block w-full text-sm mb-1 text-neutral-400 leading-4">
+                  With trading / investing. 0 meaning no experience, 10 meaning
+                  expert.
                 </span>
                 <div className="relative">
                   <progress
