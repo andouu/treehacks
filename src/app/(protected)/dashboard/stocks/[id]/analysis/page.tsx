@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { use } from "react";
 
 import {
-  Area,
-  AreaChart,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   TooltipProps,
@@ -15,9 +15,22 @@ import PromptWindow from "./Components/PromptWindow";
 
 const CustomTooltip = ({ active, payload }: TooltipProps<number, number>) => {
   if (active && payload && payload.length) {
+    const actual = payload[0].payload.price.toFixed(2);
+    const predicted =
+      payload.length > 1 ? payload[0].payload.prediction.toFixed(2) : null;
     return (
-      <div className="px-5 py-1 bg-neutral-950 rounded-lg text-white">
-        ${payload[0].payload.price.toFixed(2)}
+      <div className="px-4 py-2 bg-neutral-950 rounded-xl text-white">
+        <span className="block">Actual: ${actual}</span>
+        {predicted && (
+          <>
+            <span className="block">
+              Predicted: <span>${predicted}</span>
+            </span>
+            <span>
+              Delta: $<span>{(actual - predicted).toFixed(2)}</span>
+            </span>
+          </>
+        )}
       </div>
     );
   }
@@ -33,12 +46,21 @@ const AnalysisColumn = ({
   data: StockData;
 }) => {
   const latestPrice = data["Actual Future Prices"].at(-1)!;
-  const normalized = data["Training Data (Actual)"]
-    .concat(data["Actual Future Prices"])
-    .map((price, i) => ({
-      name: i,
-      price,
-    }));
+  const normalized = data["Training Data (Actual)"].map((price, i) => ({
+    name: i,
+    price,
+  }));
+
+  const predictionZipped = [];
+  for (let i = 0; i < data["Actual Future Prices"].length; i++) {
+    predictionZipped.push({
+      name: i + normalized.length,
+      price: data["Actual Future Prices"][i],
+      prediction: data["Predicted Future Prices"][i],
+    });
+  }
+
+  const completeZipped = normalized.concat(predictionZipped);
 
   return (
     <div className="flex-1 overflow-y-auto p-8 pt-12">
@@ -49,22 +71,23 @@ const AnalysisColumn = ({
         </div>
       </div>
       <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={normalized}>
-          <defs>
-            <linearGradient id="gr" y1="0" y2="1" x1="0" x2="0">
-              <stop offset="0%" stopColor="var(--purple)" stopOpacity={1} />
-              <stop offset="100%" stopColor="white" stopOpacity={1} />
-            </linearGradient>
-          </defs>
+        <LineChart data={completeZipped}>
           <Tooltip content={<CustomTooltip />} />
-          <Area
+          <Line
+            type="monotone"
+            dataKey="prediction"
+            stroke="lightgray"
+            dot={false}
+            strokeWidth={2.5}
+          />
+          <Line
             type="monotone"
             dataKey="price"
             stroke="var(--purple)"
-            fill="url(#gr)"
+            dot={false}
             strokeWidth={2.5}
           />
-        </AreaChart>
+        </LineChart>
       </ResponsiveContainer>
     </div>
   );

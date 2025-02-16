@@ -8,7 +8,7 @@ export default function Settings() {
   const signOutMutation = useMutation({
     mutationFn: async () => {
       localStorage.removeItem("auth");
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 150));
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["auth"] });

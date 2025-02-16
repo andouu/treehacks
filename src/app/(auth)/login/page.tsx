@@ -144,7 +144,7 @@ export default function Login() {
         interests: selectedInterests,
       };
       await localStorage.setItem("auth", JSON.stringify(user));
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 150));
       setStage(3);
 
       queryClient.invalidateQueries({ queryKey: ["auth"] });
