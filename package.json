@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^1.1.9",
     "@ai-sdk/openai": "^1.1.11",
     "@llm-ui/code": "^0.13.3",
     "@llm-ui/markdown": "^0.13.3",

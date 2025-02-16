@@ -3,10 +3,15 @@ import { LoadingIndicator } from "@/app/Components/LoadingIndicator";
 import { useChat } from "@ai-sdk/react";
 import { motion } from "motion/react";
 import clsx from "clsx";
+import { useAuth } from "@/app/Context/Auth";
 
 const PromptWindow = () => {
+  const { user } = useAuth();
   const { messages, input, handleInputChange, handleSubmit, status, stop } =
-    useChat();
+    useChat({
+      headers: { "Content-Type": "application/json" },
+      body: { user },
+    });
 
   return (
     <div className="w-[530px] h-full flex flex-col justify-end resize-x border-l-2 border-neutral-100 overflow-hidden">
@@ -39,7 +44,17 @@ const PromptWindow = () => {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                   >
-                    {m.content}
+                    {m.role === "assistant" ? (
+                      m.content.indexOf("</think>\n") === -1 ? (
+                        <span className="text-neutral-400 italic">
+                          Reasoning...
+                        </span>
+                      ) : (
+                        m.content.slice(m.content.indexOf("</think>\n\n") + 10)
+                      )
+                    ) : (
+                      m.content
+                    )}
                   </motion.div>
                   {m.role === "user" && (
                     <div className="w-9 h-9 shrink-0 p-2 flex items-center justify-center rounded-full border border-neutral-100">

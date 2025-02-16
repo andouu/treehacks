@@ -1,20 +1,37 @@
-import { openai } from "@ai-sdk/openai";
-import { streamText } from "ai";
-
-export const dynamic = "force-dynamic";
+import { groq } from "@ai-sdk/groq";
+import { CoreMessage, streamText } from "ai";
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { user, messages } = await req.json();
   if (!messages) {
     return new Response(JSON.stringify({ error: "No prompt provided" }), {
       status: 400,
     });
   }
 
+  console.log({ user });
+
+  // todo: fetch sys prompt
+  const { name, experience, riskTolerance, interests } = user;
+  const sysFetch = await fetch("http://localhost:8000/api/sysprompt", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      prompt: (messages as CoreMessage[]).findLast((m) => m.role === "user")!
+        .content,
+      name,
+      experience,
+      riskTolerance,
+      interests,
+    }),
+  });
+  const { system_prompt } = await sysFetch.json();
+  console.log(system_prompt);
+
   const result = streamText({
-    model: openai("gpt-3.5-turbo"),
+    model: groq("deepseek-r1-distill-llama-70b"),
     messages,
-    system: "You are a helpful assistant. Your name is Aaron.",
+    system: system_prompt,
   });
 
   return result.toDataStreamResponse();
