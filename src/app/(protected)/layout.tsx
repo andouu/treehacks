@@ -18,5 +18,5 @@ export default function ProtectedLayout({
     permanentRedirect("/login");
   }
 
-  return children;
+  return <div>{children}</div>;
 }

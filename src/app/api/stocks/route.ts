@@ -6,7 +6,6 @@ export async function GET() {
   try {
     const contents = await fs.readFileSync(filePath, "utf8");
     const json = JSON.parse(contents);
-    console.log(Object.keys(json));
     return new Response(JSON.stringify(json));
   } catch (err) {
     console.error(err);

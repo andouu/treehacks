@@ -9,14 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.1.11",
+    "@llm-ui/code": "^0.13.3",
+    "@llm-ui/markdown": "^0.13.3",
+    "@llm-ui/react": "^0.13.3",
     "@tanstack/react-query": "^5.66.0",
+    "ai": "^4.1.41",
     "clsx": "^2.1.1",
+    "html-react-parser": "^5.2.2",
     "motion": "^12.4.3",
     "next": "15.1.7",
+    "openai": "^4.85.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",
-    "recharts": "^2.15.1"
+    "react-markdown": "^9.0.3",
+    "recharts": "^2.15.1",
+    "remark-gfm": "^4.0.1",
+    "shiki": "^2.4.1",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "typescript": "^5",

@@ -43,8 +43,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     queryFn: fetchAuth,
   });
 
-  console.log(authQuery.data);
-
   return (
     <AuthContext.Provider
       value={{ user: authQuery.data || null, isLoading: authQuery.isLoading }}

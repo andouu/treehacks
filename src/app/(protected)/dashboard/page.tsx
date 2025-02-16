@@ -23,7 +23,7 @@ const StockEntry = ({ ticker, data }: { ticker: string; data: StockData }) => {
         </ResponsiveContainer>
       </span>
       <div className="flex justify-end h-full py-2">
-        <Link href={`/stocks/${ticker}/analysis`}>
+        <Link href={`/dashboard/stocks/${ticker}/analysis`}>
           <button className="h-full px-5 text-white text-sm bg-neutral-950 rounded-md active:scale-95 transition-transform duration-150">
             View
           </button>
@@ -44,8 +44,8 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <div className="w-full grid grid-cols-2 gap-x-2 gap-y-2 px-5 py-5">
+    <div className="flex-1 max-h-full overflow-y-auto">
+      <div className="w-full grid grid-cols-2 gap-x-2 gap-y-2 px-5 py-5 overflow-y-auto">
         {Object.entries(stocksQuery.data).map(([ticker, data]) => (
           <StockEntry key={ticker} ticker={ticker} data={data} />
         ))}
