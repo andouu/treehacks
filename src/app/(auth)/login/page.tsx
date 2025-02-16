@@ -174,7 +174,7 @@ export default function Login() {
             animate="animate"
             exit="exit"
           >
-            <span className="text-3xl">Welcome to EasyTrade!</span>
+            <span className="text-3xl">Welcome to TradeLingo!</span>
             <span className="mt-2">
               For your best experience, we kindly ask you to answer a few
               questions.
@@ -336,7 +336,7 @@ export default function Login() {
               <div className="w-full">
                 <span className="block w-full text-sm">Interests</span>
                 <span className="block w-full text-sm mb-3 text-neutral-400 leading-4">
-                  What do you want to get out of EasyTrade?
+                  What do you want to get out of TradeLingo?
                 </span>
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
                   {INTERESTS.map((interest, i) => {
@@ -398,14 +398,14 @@ export default function Login() {
           >
             <span className="text-3xl">Thanks!</span>
             <span className="mt-2">
-              That&apos;s all we needed. Welcome to EasyTrade!
+              That&apos;s all we needed. Welcome to TradeLingo!
             </span>
             <div className="relative w-80 h-1 my-5 bg-purple-500 rounded-full">
               <motion.div
                 className="absolute l-0 w-full h-1 rounded-full bg-purple-200"
                 initial={{ width: "100%" }}
                 animate={{ width: 0 }}
-                transition={{ duration: 5, ease: "linear" }}
+                transition={{ duration: 3, ease: "linear" }}
                 onAnimationComplete={() => router.replace("/dashboard")}
               />
             </div>
